@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 
-from wordpress_auth.decorators import (
+from .decorators import (
     wordpress_login_required, wordpress_requires_role,
     wordpress_requires_capability
 )

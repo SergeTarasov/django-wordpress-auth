@@ -2,12 +2,11 @@ import hmac
 import hashlib
 from time import time
 
-from django.utils.six.moves.urllib.parse import urljoin, unquote_plus
+from urllib.parse import unquote_plus, urljoin
 from django.utils.encoding import force_bytes
 
-from wordpress_auth import (WORDPRESS_LOGGED_IN_KEY, WORDPRESS_LOGGED_IN_SALT,
-                            WORDPRESS_COOKIEHASH)
-from wordpress_auth.models import WpOptions, WpUsers
+from . import (WORDPRESS_LOGGED_IN_KEY, WORDPRESS_LOGGED_IN_SALT, WORDPRESS_COOKIEHASH)
+from .models import WpOptions, WpUsers
 
 
 def get_site_url():
@@ -66,11 +65,11 @@ def _validate_auth_cookie(cookie):
     key_salt = WORDPRESS_LOGGED_IN_KEY + WORDPRESS_LOGGED_IN_SALT
     key_msg = '{}|{}|{}|{}'.format(username, pwd_frag, expiration, token)
     key = hmac.new(force_bytes(key_salt), force_bytes(key_msg),
-        digestmod=hashlib.md5).hexdigest()
+                   digestmod=hashlib.md5).hexdigest()
 
     hash_msg = '{}|{}|{}'.format(username, expiration, token)
     hash = hmac.new(force_bytes(key), force_bytes(hash_msg),
-        digestmod=hashlib.sha256).hexdigest()
+                    digestmod=hashlib.sha256).hexdigest()
 
     if hash != cookie_hmac:
         return False

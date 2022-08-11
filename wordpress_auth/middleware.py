@@ -1,6 +1,6 @@
 from django.utils.functional import SimpleLazyObject
 
-from wordpress_auth.utils import get_wordpress_user
+from .utils import get_wordpress_user
 
 
 class WordPressAuthMiddleware(object):

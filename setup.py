@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 try:
     from setuptools import setup
@@ -7,7 +7,7 @@ except ImportError:
 
 setup(
     name='django-wordpress-auth',
-    version='0.1.31',
+    version='0.2',
     description='Django integration with WordPress authentication and roles / capabilities system.',
     long_description=open('README.rst').read(),
     include_package_data=True,
@@ -16,14 +16,13 @@ setup(
         'wordpress_auth',
     ],
     install_requires=[
-        'Django',
+        'Django==4.1',
         'phpserialize==1.3'
     ],
     classifiers=[
         'Environment :: Web Environment',
         'Framework :: Django',
         'Intended Audience :: Developers',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.3',
         'Topic :: Software Development :: Libraries :: Python Modules',

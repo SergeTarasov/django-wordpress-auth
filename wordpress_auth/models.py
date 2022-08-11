@@ -3,7 +3,7 @@ import phpserialize
 from django.db import models
 from django.utils.encoding import force_bytes
 
-from wordpress_auth import WORDPRESS_TABLE_PREFIX
+from . import WORDPRESS_TABLE_PREFIX
 
 
 class WpOptions(models.Model):
@@ -19,8 +19,9 @@ class WpOptions(models.Model):
 
 class WpUsermeta(models.Model):
     id = models.BigIntegerField(db_column='umeta_id', primary_key=True)
-    user = models.ForeignKey('wordpress_auth.WpUsers', db_column='user_id',
-        related_name='meta')
+    user = models.ForeignKey(
+        'wordpress_auth.WpUsers', db_column='user_id', related_name='meta', on_delete=models.CASCADE
+    )
     meta_key = models.CharField(max_length=765, blank=True)
     meta_value = models.TextField(blank=True)
 
@@ -65,10 +66,8 @@ class WpUsers(models.Model):
         """Retrieves the user capabilities based on his roles."""
         option = WORDPRESS_TABLE_PREFIX + 'user_roles'
         capabilities = []
-        roles_data = WpOptions.objects.using('wordpress') \
-            .get(option_name=option).option_value
-        roles_data = phpserialize.loads(force_bytes(roles_data),
-            decode_strings=True)
+        roles_data = WpOptions.objects.using('wordpress').get(option_name=option).option_value
+        roles_data = phpserialize.loads(force_bytes(roles_data), decode_strings=True)
 
         for role in self.roles:
             role_capabilities = roles_data.get(role).get('capabilities')
